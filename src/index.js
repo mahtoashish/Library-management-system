@@ -5,6 +5,7 @@ const path = require("path");
 const hbs = require("hbs");
 const templatePath = path.join(__dirname, '../templates');
 const collection=require("./mongodb");
+const entry=require("../models/books")
 
 // models
 const books = require('../models/books'); // Importing the books model schema
@@ -63,8 +64,8 @@ app.post("/login", async (req, res) => {
 
 app.post('/books', async (req, res) => {
     try {
-        const { title, author } = req.body;
-        const book = new Book({ title, author });
+        const entry = req.body;
+        const book = new books({ title, author, category, price, quantity });
         await book.save();
         res.status(201).json(book); // Sending the created book object as JSON response
     } catch (err) {
