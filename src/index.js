@@ -6,9 +6,11 @@ const hbs = require("hbs");
 const templatePath = path.join(__dirname, '../templates');
 const collection=require("./mongodb");
 const entry=require("../models/books")
+require('dotenv').config();
 
 // models
 const books = require('../models/books'); // Importing the books model schema
+const PORT = process.env.PORT || 3001;
 
 app.use(express.json());
 app.set("view engine", 'hbs');
@@ -64,9 +66,10 @@ app.post("/login", async (req, res) => {
 
 app.post('/books', async (req, res) => {
     try {
-        const entry = req.body;
-        const book = new books({ title, author, category, price, quantity });
+        const { name, author, category, price, quantity } = req.body;
+        const book = new books({ name, author, category, price, quantity });
         await book.save();
+        console.log('saved');
         res.status(201).json(book); // Sending the created book object as JSON response
     } catch (err) {
         console.error('Error creating book', err);
@@ -74,8 +77,23 @@ app.post('/books', async (req, res) => {
     }
 });
 
+app.get('/books', async (req, res) => {
+    try {
+        // Fetch all books from the database
+        const allBooks = await books.find();
+        
+        // Sending the array of books as a JSON response
+        console.log("Fetched");
+        res.status(200).json(allBooks);
+    } catch (err) {
+        // Handling errors
+        console.error('Error fetching books:', err);
+        res.status(500).send('Internal Server Error');
+    }
+});
 
-app.listen(3001, () => { console.log('Server is running on port 3001') });
+
+app.listen(PORT, () => { console.log('Server is running on port 3001') });
 
 
 

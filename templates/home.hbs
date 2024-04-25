@@ -123,14 +123,39 @@
             <input type="text" id="category" placeholder="Category">
             <input type="text" id="price" placeholder="Price">
             <input type="text" id="quantity" placeholder="Quantity">
-            <input type="submit" name="" id="">
-            {{!-- <button onclick="addBook()">Add Book</button> --}}
+            {{!-- <input type="submit" name="" id=""> --}}
+            <button id="post" >Add Book</button>
             </form>
         </div>
     </div>
 
     {{!-- <script src="home.js"></script>  --}}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        const postBtn=document.getElementById("post");
+
+        const baseUrl='//http://localhost:3001/books'
+
+        postBtn.addEventListener('click',postInfo)
+        async function postInfo(){
+            e.preventDefault()
+            const res=await fetch{ baseUrl
+                method:'POST',
+                headers:
+                {
+                    "Content-Type":"application/json"
+                },
+                body:JSON.stringify({
+                    title: document.querySelector('#book-title').value,
+                    author: document.querySelector('#bookId').value,
+                    category: document.querySelector("#category").value,
+                    price: parseFloat(document.querySelector("#price").value),
+                    quantity:parseInt(document.querySelector("#quantity").value)
+                })
+            }
+        }
+    </script>
 </body>
 
 </html>
